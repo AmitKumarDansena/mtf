@@ -1,0 +1,44 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "mtf_be/mtf_be/wsgi.py",
+            "use": "@vercel/python",
+            "config": {
+                "maxLambdaSize": "15mb",
+                "runtime": "python3.12"
+            }
+        },
+        {
+            "src": "build_backend.sh",
+            "use": "@vercel/static-build",
+            "config": {
+                "outputDirectory": "staticfiles"
+            }
+        },
+        {
+            "src": "build_frontend.sh",
+            "use": "@vercel/static-build",
+            "config": {
+                "outputDirectory": "mtf_fe/build/web"
+            }
+        }
+    ],
+    "routes": [
+        {
+            "src": "/static/(.*)",
+            "dest": "/static/$1"
+        },
+        {
+            "src": "/api/(.*)",
+            "dest": "mtf_be/mtf_be/wsgi.py"
+        },
+        {
+            "handle": "filesystem"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/index.html"
+        }
+    ]
+}
